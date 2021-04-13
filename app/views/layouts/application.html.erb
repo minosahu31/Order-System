@@ -1,0 +1,219 @@
+<% if user_signed_in? %>
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= yield(:title) %> | Order System</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+    <%= stylesheet_link_tag "application", media: "all", 'data-turbolinks-track': "reload" %>
+    <%= stylesheet_link_tag "print", :media => "print" %>
+    <!-- This refers to app/javascript/stylesheets/application.scss-->
+    <%= stylesheet_pack_tag "application", 'data-turbolinks-track': "reload" %>
+    <!-- Mainly scripts -->
+    <%= javascript_pack_tag "application", 'data-turbolinks-track': "reload" %>
+  </head>
+
+  <body class="fixed-nav fixed-nav-basic"> <!-- min sidemenu: mini-navbar-->
+    <div id="wrapper">
+      <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+          <ul class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+              <div class="dropdown profile-element">
+                <span>
+                  <h2 style="font-size: 30px; margin-bottom: 20px; color: #e891f4">Order <span style="color: #b651a7; font-weight: 900">System</span></h2>
+                </span>
+                <!--<a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                  <span class="clear">
+                      <span class="block m-t-xs">
+                          <strong class="font-bold">Order System</strong> <b class="caret"></b>
+                      </span>
+                  </span>
+                </a>
+                <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                  <li><%= link_to "Logout", destroy_user_session_path, :method => :delete %></li>
+                </ul>-->
+              </div>
+              <div class="logo-element">
+                <h2 style="font-size: 10px; margin-top: 0px; margin-bottom: 0px; color: #e891f4">Order <span style="color: #b651a7; font-weight: 900">System</span></h2>
+              </div>
+            </li>
+            <li class="landing_link">
+              <%= link_to orders_path do %>
+                <i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span>
+              <% end %>
+            </li>
+            <li class="active">
+              <%= link_to orders_path do %>
+                <i class="fa fa-shopping-bag"></i> <span class="nav-label">All Orders</span> 
+              <% end %>
+            </li>
+            <% # <li class="active"> %>
+              <% #= link_to new_order_path do %>
+                <% # <i class="fa fa-plus-circle"></i> <span class="nav-label">Add Order</span> %>
+              <% # end %>
+            <% # </li> %>
+            <% # <li class="active"> %>
+              <% #= link_to edit_user_registration_path do %>
+                <% # <i class="fa  fa-pencil-square"></i> <span class="nav-label">Change Password</span> %>
+              <% # end %>
+            <% # </li> %>
+          </ul>
+        </div>
+      </nav>
+
+      <div id="page-wrapper" class="gray-bg" style="min-height: 600px;">
+        <div class="row border-bottom">
+          <nav class="navbar navbar-fixed-top white-bg" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+              <% # <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " data-toggle="collapse" href="#sidebar"><i class="fa fa-bars"></i> </a> %>
+            </div>
+            <ul class="nav navbar-top-links navbar-right">
+              <li style="padding: 20px 10px">
+                <span class="m-r-sm text-muted"><strong>Order</strong> System.</span>
+              </li>
+              <li class="pull-right">
+                <%= link_to destroy_user_session_path, :method => "delete" do %>
+                    <i class="fa fa-sign-out"></i> Log out
+                <% end %>
+              </li>
+            </ul>
+          </nav>
+        </div>
+
+        <div class="wrapper wrapper-content">
+
+          <% if notice %>
+              <div class="alert alert-info">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Notice!</strong> <%= notice %>
+              </div>
+          <% end %>
+
+          <% if alert %>
+              <div class="alert alert-danger">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Alert!</strong> <%= alert %>
+              </div>
+          <% end %>
+
+          <%= yield %>
+
+        </div>
+
+        <div class="footer">
+          <div class="pull-right">
+             BY <strong><span style="color: #e891f4">Order</span><span style="color:#b651a7"> System</span></strong>
+          </div>
+          <div>
+            <strong>Copyright</strong> Order System &copy; <%= Time.now.year %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Custom and plugin javascript -->
+    <script type="text/javascript">
+      $('.i-checks').iCheck({
+        checkboxClass: 'icheckbox_square-green',
+        radioClass: 'iradio_square-green'
+      });
+    </script>
+
+    <% if notice %>
+      <script>
+        $(document).ready(function() {
+          setTimeout(function() {
+            toastr.options = {
+              closeButton: true,
+              progressBar: true,
+              showMethod: 'slideDown',
+              timeOut: 4000
+            };
+            toastr.success('<%= notice %>', 'Notice');
+          }, 1300);
+        });
+      </script>
+    <% end %>
+
+    <script>
+      $.fn.dataTable.ext.search.push(
+        function( settings, data, dataIndex ) {
+            var order_status =  $('#order_status').val().trim();
+            var user =  $('#user').val().trim();
+            var order_status_val = data[7].trim();
+            var user_val =  data[0].trim();
+            if (order_status == "All" && user == "All" ){
+              return true
+            }
+            if ( 
+              order_status == order_status_val && user == "All" ||
+              order_status == "All" && user == user_val ||
+              order_status == order_status_val && user == user_val
+             ){
+                return true;
+            }
+            return false;
+        }
+      );
+      $(document).ready(function(){
+        var table = $('.dataTables-example').DataTable();
+         // Event listener to the two range filtering inputs to redraw on input
+        $('#order_status, #user').change( function() {
+            table.draw();
+        });
+      })
+    </script>
+         
+  </body>
+</html>
+
+<% else %>
+
+<!DOCTYPE html>
+  <html>
+
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+      <title>Login | Order System</title>
+      <%= csrf_meta_tags %>
+      <%= csp_meta_tag %>
+
+      <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+      <%= stylesheet_link_tag "application", media: "all", 'data-turbolinks-track': "reload" %>
+      <%= stylesheet_link_tag "print", :media => "print" %>
+  
+      <!-- Mainly scripts -->
+      <%= javascript_pack_tag "application", 'data-turbolinks-track': "reload" %>
+    </head>
+
+    <body class="gray-bg">
+    <div class="middle-box text-center loginscreen animated fadeInDown">
+      <div>
+
+        <%= yield %>
+
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="pull-right">
+        BY <strong><span style="color: #e891f4">Order</span><span style="color:#b651a7"> System</span></strong>
+      </div>
+      <div>
+        <strong>Copyright</strong> Order System &copy; <%= Time.now.year %>
+      </div>
+    </div>
+
+    </body>
+
+  </html>
+
+<% end %>

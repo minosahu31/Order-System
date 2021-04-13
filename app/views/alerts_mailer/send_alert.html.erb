@@ -1,0 +1,15 @@
+ <p> Hello <%= @user.username %></p>
+ <div class="container" style="background:#ebf8f3; text-align: center; padding: 20px 0px">
+    <p> <h2> Order <%= @order.order_status %> </h2> </p>
+    <p> <%= @user.username %>, thank you for your order! </p>
+ </div>
+ <div class="container">
+    <h2>Order Summery</h2>
+    <p><h3>Order Id: OSID<%= @order.id %></h3></p>
+    <p><h4>Item Id: <%= @order.item_id %></h4></p>
+    <p><h4>Phone: <%= @order.phone %></h4></p>
+    <p><h4>Amount: <%= @order.amount %></h4></p>
+    <p><h4>Payment Option: <%= @order.payment_option %></h4></p>
+    <p><h4>Address</h4></p>
+    <p><h4><%= @order.address %></h4></p>
+ </div>

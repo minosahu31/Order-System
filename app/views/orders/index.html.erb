@@ -1,0 +1,112 @@
+<% content_for :title, "All Orders" %>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5>All Orders Data</h5>
+        <div class="ibox-tools">
+          <div class="col-sm-6 col-md-6">
+          <tr>
+            <div class="col-sm-12 col-md-4" style="align: right"><td>Order status:</td></div>
+            <div class="col-sm-12 col-md-8" style="margin-top:-8px">
+              <td class="col-sm-6 col-md-3">
+                <select class="custom-select custom-select-sm form-control form-control-sm" aria-label="Disabled select example" id="order_status">
+                  <option value="All" selected>All</option>
+                  <option value="Confirmed">Confirmed</option>
+                  <option value="Ready">Ready</option>
+                  <option value="Send">Send</option>
+                  <option value="Delivered">Delivered</option>
+                  <option value="Returned">Returned</option>
+                  <option value="Cancelled">Cancelled</option>
+                </select>
+              </td>
+            </div>  
+          </tr>
+          </div>
+          <div class= "col-sm-6 col-md-3">
+           <tr>
+           <div class="col-sm-12 col-md-4" style="align: right">
+            <td>Users:</td>
+            </div>
+            <div class="col-sm-12 col-md-8" style="margin-top:-8px">
+            <td>
+              <select class="custom-select custom-select-sm form-control form-control-sm" aria-label="Disabled select example" id="user">
+                <option value="All" selected>All</option>
+                <% @users.each do |user| %>
+                  <option value="<%= user[1] %>"><%= user[1] %></option>
+                <% end %>
+              </select>
+            </td>
+            </div>
+          </tr> 
+          </div>
+        </div>
+      </div>
+      <div class="ibox-content">
+
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered table-hover dataTables-example">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Delivery Date</th>
+                <th>Item</th>
+                <th>Payment Option</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th width="101px">Buttons</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+            <% @orders.each do |order| %>
+
+              <tr class="">
+                <td><%= order.user.username %></td>
+                <td><%= order.phone %></td>
+                <td><%= order.address %></td>
+                <td><%= order.delivery_date %></td>
+                <td><%= order.item_id %></td>
+                <td><%= order.payment_option %></td>
+                <td><%= order.amount %></td>
+                <td><span class="badge badge-primary"> <%= order.order_status %></span></td>
+                <td>
+                  <%= link_to order_path(order.id), :class => "btn btn-white btn-bitbucket", method: :delete, data: { confirm: "Are you sure?" } do %>
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                  <% end %>
+                  <%= link_to edit_order_path(order.id), :class => "btn btn-white btn-bitbucket" do %>
+                      <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                  <% end %>
+                </td>
+              </tr>
+
+            <% end %>
+
+            </tbody>
+
+            <tfoot>
+              <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Delivery Date</th>
+                <th>Item</th>
+                <th>Payment Option</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Buttons</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
